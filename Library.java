@@ -1,0 +1,137 @@
+import java.util.Scanner;
+
+// Class Node untuk menyimpan data buku 
+class Node {
+    String kodeBuku, judul, penulis;
+    Node next;
+
+    Node(String kodeBuku, String judul, String penulis) {
+        this.kodeBuku = kodeBuku;
+        this.judul = judul;
+        this.penulis = penulis;
+        this.next = null;
+    }
+}
+
+// Class LinkedList untuk operasi data 
+class LinkedList {
+    Node head;
+    int count = 0;
+
+    // Tambah Buku di akhir daftar (Push)
+    void tambahBuku(String kode, String judul, String penulis) {
+        if (kode.length() > 5) {
+            System.out.println("Error: Kode Buku maksimal 5 karakter!");
+            return;
+        }
+        Node newNode = new Node(kode, judul, penulis);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node temp = head;
+            while (temp.next != null) temp = temp.next;
+            temp.next = newNode;
+        }
+        count++;
+        System.out.println("Data berhasil ditambahkan!");
+    }
+
+    // Hapus Buku terakhir (Pop)
+    void hapusBuku() {
+        if (head == null) {
+            System.out.println("Tidak ada data untuk dihapus.");
+            return;
+        }
+        if (head.next == null) {
+            head = null;
+        } else {
+            Node temp = head;
+            while (temp.next.next != null) temp = temp.next;
+            temp.next = null;
+        }
+        count--;
+        System.out.println("Buku terakhir berhasil dihapus.");
+    }
+
+    // Cari Buku berdasarkan kode
+    void cariBuku(String kode) {
+        Node temp = head;
+        while (temp != null) {
+            if (temp.kodeBuku.equalsIgnoreCase(kode)) {
+                System.out.println("Buku Ditemukan:");
+                System.out.println("Kode: " + temp.kodeBuku + " | Judul: " + temp.judul + " | Penulis: " + temp.penulis);
+                return;
+            }
+            temp = temp.next;
+        }
+        System.out.println("Buku tidak ditemukan.");
+    }
+
+    // Tampilkan semua buku & totalnya
+    void tampilkanSemua() {
+        if (head == null) {
+            System.out.println("Daftar buku kosong.");
+            return;
+        }
+        Node temp = head;
+        System.out.println("\nDAFTAR BUKU:");
+        while (temp != null) {
+            System.out.println("Kode: " + temp.kodeBuku + " | Judul: " + temp.judul + " | Penulis: " + temp.penulis);
+            temp = temp.next;
+        }
+        System.out.println("Total Buku: " + count);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        LinkedList perpus = new LinkedList();
+        Scanner input = new Scanner(System.in);
+        int pilihan = 0;
+
+        do {
+            System.out.println("\n===== SISTEM DATA BUKU =====");
+            System.out.println("1. Tambah Buku (Push)");
+            System.out.println("2. Hapus Buku (Pop)");
+            System.out.println("3. Cari Buku");
+            System.out.println("4. Lihat Semua Buku");
+            System.out.println("5. Keluar");
+            System.out.print("Pilih menu: ");
+            
+            if (input.hasNextInt()) {
+                pilihan = input.nextInt();
+                input.nextLine(); // membersihkan buffer
+            } else {
+                System.out.println("Masukkan angka saja!");
+                input.nextLine(); // membersihkan input salah
+                continue;
+            }
+
+            switch (pilihan) {
+                case 1:
+                    System.out.print("Masukkan Kode: "); String k = input.nextLine();
+                    System.out.print("Masukkan Judul: "); String j = input.nextLine();
+                    System.out.print("Masukkan Penulis: "); String p = input.nextLine();
+                    perpus.tambahBuku(k, j, p);
+                    break;
+                case 2:
+                    perpus.hapusBuku();
+                    break;
+                case 3:
+                    System.out.print("Masukkan Kode Buku yang dicari: ");
+                    String cari = input.nextLine();
+                    perpus.cariBuku(cari);
+                    break;
+                case 4:
+                    perpus.tampilkanSemua();
+                    break;
+                case 5:
+                    System.out.println("Keluar program...");
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid!");
+            }
+        } while (pilihan != 5);
+        input.close();
+    }
+}
